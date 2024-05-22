@@ -3,6 +3,7 @@ files=$(git diff --cached --name-only --diff-filter=ACM -- '*.php');
 
 if [ -n "$files" ]; then
   composer lint/pint $files
+  composer lint/phpstan $files
 
   git add $files
 fi
