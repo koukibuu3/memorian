@@ -45,6 +45,9 @@
             "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
             "@php artisan migrate --graceful --ansi"
         ],
+        "post-install-cmd": [
+            "cp .githooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit"
+        ],
         "provision": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\"",
             "@php composer install --no-interaction --no-suggest --prefer-dist",
@@ -52,6 +55,9 @@
         ],
         "migrate": [
             "@php artisan migrate --graceful --ansi"
+        ],
+        "lint/pint": [
+            "./vendor/bin/pint"
         ]
     },
     "extra": {

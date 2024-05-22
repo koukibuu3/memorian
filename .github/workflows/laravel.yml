@@ -19,5 +19,7 @@ jobs:
         run: composer provision
       - name: Directory Permissions
         run: chmod -R 777 storage bootstrap/cache
+      - name: Execute Laravel Pint
+        run: composer lint/pint
       - name: Execute tests (Unit and Feature tests) via PHPUnit/Pest
         run: php artisan test
