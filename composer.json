@@ -1,11 +1,7 @@
 {
-    "name": "laravel/laravel",
+    "name": "koukibuu3/memorian",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": [
-        "laravel",
-        "framework"
-    ],
+    "description": "Task management system (for study)",
     "license": "MIT",
     "require": {
         "php": "^8.3",
