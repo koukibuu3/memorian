@@ -18,7 +18,7 @@ final class Priority
 
     public readonly string $label;
 
-    public function __construct(int $id)
+    public function __construct(public readonly int $id)
     {
         if ($id < 1 || $id > 5) {
             throw new InvalidArgumentException('Priority must be between 1 and 5');
