@@ -13,5 +13,7 @@ interface TaskRepositoryInterface
      */
     public function findAll(): array;
 
+    public function findById(string $id): Task;
+
     public function store(Task $task): void;
 }

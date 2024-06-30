@@ -32,6 +32,19 @@ final class TaskRepository implements TaskRepositoryInterface
         return $taskEntities;
     }
 
+    public function findById(string $id): Task
+    {
+        $taskModel = TaskModel::with('assignee')->findOrFail($id);
+
+        return new Task(
+            $taskModel->id,
+            $taskModel->title,
+            $taskModel->description,
+            new Assignee($taskModel->assignee->id, $taskModel->assignee->name),
+            new Priority($taskModel->priority),
+        );
+    }
+
     public function store(Task $task): void
     {
         TaskModel::create([
