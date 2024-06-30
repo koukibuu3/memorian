@@ -64,4 +64,9 @@ final class TaskRepository implements TaskRepositoryInterface
         $taskModel->priority = $task->priority->id;
         $taskModel->save();
     }
+
+    public function delete(string $id): void
+    {
+        TaskModel::destroy($id);
+    }
 }
