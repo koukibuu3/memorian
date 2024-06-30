@@ -28,4 +28,15 @@ final class Task
             priority: new Priority($priority),
         );
     }
+
+    public static function recreate(string $id, string $title, string $description, int $userId, string $userName, int $priority): Task
+    {
+        return new Task(
+            id: $id,
+            title: $title,
+            description: $description,
+            assignee: new Assignee($userId, $userName),
+            priority: new Priority($priority),
+        );
+    }
 }
