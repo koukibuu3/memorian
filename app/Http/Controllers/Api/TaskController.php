@@ -14,17 +14,25 @@ final class TaskController
     {
     }
 
-    /**
-     * 一覧取得
-     */
+    /** 一覧取得 */
     public function index(): JsonResponse
     {
         return response()->json($this->taskRepository->findAll());
     }
 
-    /**
-     * 登録
-     */
+    /** 詳細取得 */
+    public function show(string $id): JsonResponse
+    {
+        try {
+            $task = $this->taskRepository->findById($id);
+        } catch (Exception $e) {
+            return response()->json(['message' => "Task not found. {$e->getMessage()}"], 404);
+        }
+
+        return response()->json($task);
+    }
+
+    /** 登録 */
     public function store(StoreTaskRequest $request): JsonResponse
     {
         $postParams = $request->validated();
