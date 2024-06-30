@@ -54,4 +54,14 @@ final class TaskRepository implements TaskRepositoryInterface
             'priority' => $task->priority->id,
         ]);
     }
+
+    public function update(Task $task): void
+    {
+        $taskModel = TaskModel::findOrFail($task->id);
+        $taskModel->title = $task->title;
+        $taskModel->description = $task->description;
+        $taskModel->assignee_id = $task->assignee->userId;
+        $taskModel->priority = $task->priority->id;
+        $taskModel->save();
+    }
 }
