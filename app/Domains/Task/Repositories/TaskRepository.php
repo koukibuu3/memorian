@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Domains\Task\Repositories;
 
-use App\Domains\Task\Entities\Assignee;
 use App\Domains\Task\Entities\Task;
-use App\Domains\Task\ValueObjects\Priority;
 use App\Infrastructures\Models\Task as TaskModel;
 
 final class TaskRepository implements TaskRepositoryInterface
@@ -20,16 +18,31 @@ final class TaskRepository implements TaskRepositoryInterface
 
         /** @var Task[] */
         $taskEntities = $taskModels->map(function (TaskModel $taskModel) {
-            return new Task(
+            return Task::recreate(
                 $taskModel->id,
                 $taskModel->title,
                 $taskModel->description,
-                new Assignee($taskModel->assignee->id, $taskModel->assignee->name),
-                new Priority($taskModel->priority),
+                $taskModel->assignee->id,
+                $taskModel->assignee->name,
+                $taskModel->priority
             );
         })->all();
 
         return $taskEntities;
+    }
+
+    public function findById(string $id): Task
+    {
+        $taskModel = TaskModel::with('assignee')->findOrFail($id);
+
+        return Task::recreate(
+            $taskModel->id,
+            $taskModel->title,
+            $taskModel->description,
+            $taskModel->assignee->id,
+            $taskModel->assignee->name,
+            $taskModel->priority
+        );
     }
 
     public function store(Task $task): void
@@ -40,5 +53,15 @@ final class TaskRepository implements TaskRepositoryInterface
             'assignee_id' => $task->assignee->userId,
             'priority' => $task->priority->id,
         ]);
+    }
+
+    public function update(Task $task): void
+    {
+        $taskModel = TaskModel::findOrFail($task->id);
+        $taskModel->title = $task->title;
+        $taskModel->description = $task->description;
+        $taskModel->assignee_id = $task->assignee->userId;
+        $taskModel->priority = $task->priority->id;
+        $taskModel->save();
     }
 }

@@ -18,4 +18,16 @@ final class TaskTest extends TestCase
         $task = Task::create('title', 'description', 1, 'user', 1);
         $this->assertMatchesRegularExpression('/^[0-9A-Z]{26}$/', $task->id);
     }
+
+    #[Test]
+    public function タスクを再生成できる()
+    {
+        $task = Task::recreate('ulid', 'title', 'description', 1, 'user', 1);
+        $this->assertSame('ulid', $task->id);
+        $this->assertSame('title', $task->title);
+        $this->assertSame('description', $task->description);
+        $this->assertSame(1, $task->assignee->userId);
+        $this->assertSame('user', $task->assignee->name);
+        $this->assertSame(1, $task->priority->id);
+    }
 }
