@@ -73,4 +73,16 @@ final class TaskController
 
         return response()->json($task);
     }
+
+    /** 削除 */
+    public function destroy(string $id): JsonResponse
+    {
+        try {
+            $this->taskRepository->delete($id);
+        } catch (Exception $e) {
+            return response()->json(['message' => "Failed to delete task. {$e->getMessage()}"], 500);
+        }
+
+        return response()->json(['message' => 'Task deleted.'], 204);
+    }
 }
