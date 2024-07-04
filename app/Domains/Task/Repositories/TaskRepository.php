@@ -21,6 +21,7 @@ final class TaskRepository implements TaskRepositoryInterface
         /** @var Task[] */
         $taskEntities = $taskModels->map(function (TaskModel $taskModel) {
             return new Task(
+                $taskModel->id,
                 $taskModel->title,
                 $taskModel->description,
                 new Assignee($taskModel->assignee->id, $taskModel->assignee->name),
@@ -29,5 +30,15 @@ final class TaskRepository implements TaskRepositoryInterface
         })->all();
 
         return $taskEntities;
+    }
+
+    public function store(Task $task): void
+    {
+        TaskModel::create([
+            'title' => $task->title,
+            'description' => $task->description,
+            'assignee_id' => $task->assignee->userId,
+            'priority' => $task->priority->id,
+        ]);
     }
 }
