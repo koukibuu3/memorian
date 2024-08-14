@@ -10,7 +10,12 @@
     <div class="container mx-auto p-4">
         <h1 class="font-bold text-2xl h-12"><img src="/Memorian.png" class="w-12 inline-block" />Memorian</h1>
         <div class="p-8">
-            <h2 class="font-bold text-xl">課題一覧</h2>
+            <div class="flex justify-between text-sm">
+                <h2 class="font-bold text-xl">課題一覧</h2>
+                <a href="{{ route('tasks.create') }}" class="text-gray-500 border-gray-200 border rounded-md py-1 px-6 mx-2 hover:text-orange-500 hover:border-orange-500">
+                    Create new task
+                </a>
+            </div>
             <ul role="list" class="divide-y divide-gray-100 my-4">
                 @foreach ($tasks as $task)
                 <li class="flex justify-between gap-x-6 py-5 text-gray-900">

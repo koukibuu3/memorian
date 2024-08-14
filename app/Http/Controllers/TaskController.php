@@ -6,10 +6,11 @@ use App\Domains\Task\Entities\Task;
 use App\Domains\Task\Repositories\AssigneeRepositoryInterface;
 use App\Domains\Task\Repositories\PriorityRepositoryInterface;
 use App\Domains\Task\Repositories\TaskRepositoryInterface;
-use App\Http\Requests\StoreTaskRequest;
+use Error;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 
 final class TaskController
@@ -39,25 +40,36 @@ final class TaskController
         ]);
     }
 
-    /** 登録 */
-    // public function store(StoreTaskRequest $request): JsonResponse
-    // {
-    //     $postParams = $request->validated();
-    //     try {
-    //         $task = Task::create(
-    //             $postParams['title'],
-    //             $postParams['description'],
-    //             $postParams['assignee_id'],
-    //             $postParams['assignee_name'],
-    //             $postParams['priority']
-    //         );
-    //         $this->taskRepository->store($task);
-    //     } catch (Exception $e) {
-    //         return response()->json(['message' => "Failed to create task. {$e->getMessage()}"], 500);
-    //     }
+    /** 新規作成 */
+    public function create()
+    {
+        return View::make('tasks.create', [
+            'priorities' => $this->priorityRepository->findAll(),
+            'assignees' => $this->assigneeRepository->findAll(),
+        ]);
+    }
 
-    //     return response()->json($task, 201);
-    // }
+    /** 登録 */
+    public function store(Request $request)
+    {
+        $postParams = $request->post();
+        try {
+            $task = Task::create(
+                $postParams['title'],
+                $postParams['description'],
+                $postParams['assignee_id'],
+                'None User',
+                $postParams['priority']
+            );
+            $createdId = $this->taskRepository->store($task);
+        } catch (Error $e) {
+            Log::error($e->getMessage());
+
+            return redirect()->route('tasks.create')->with('error', 'Failed to create task.');
+        }
+
+        return redirect()->route('tasks.show', ['id' => $createdId])->with('success', 'Task created.');
+    }
 
     /** 更新 */
     public function update(Request $request, string $id)

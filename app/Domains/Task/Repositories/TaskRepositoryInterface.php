@@ -15,7 +15,7 @@ interface TaskRepositoryInterface
 
     public function findById(string $id): Task;
 
-    public function store(Task $task): void;
+    public function store(Task $task): string;
 
     public function update(Task $task): void;
 

@@ -49,14 +49,16 @@ final class TaskRepository implements TaskRepositoryInterface
         );
     }
 
-    public function store(Task $task): void
+    public function store(Task $task): string
     {
-        TaskModel::create([
+        $taskModel = TaskModel::create([
             'title' => $task->title,
             'description' => $task->description,
-            'assignee_id' => $task->assignee->userId,
+            'assignee_id' => $task->assignee?->userId,
             'priority' => $task->priority->id,
         ]);
+
+        return $taskModel->id;
     }
 
     public function update(Task $task): void
