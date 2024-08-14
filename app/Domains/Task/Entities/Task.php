@@ -14,7 +14,7 @@ final class Task
         public string $id,
         public string $title,
         public string $description,
-        public Assignee $assignee,
+        public ?Assignee $assignee,
         public Priority $priority,
         public ?Carbon $createdAt = null,
         public ?Carbon $updatedAt = null,
@@ -24,7 +24,7 @@ final class Task
     public static function create(
         string $title,
         string $description,
-        int $userId,
+        ?int $userId,
         string $userName,
         int $priority,
     ): Task {
@@ -32,7 +32,7 @@ final class Task
             id: (string) Str::ulid(),
             title: $title,
             description: $description,
-            assignee: new Assignee($userId, $userName),
+            assignee: $userId && $userName ? new Assignee($userId, $userName) : null,
             priority: new Priority($priority),
         );
     }
@@ -41,8 +41,8 @@ final class Task
         string $id,
         string $title,
         string $description,
-        int $userId,
-        string $userName,
+        ?int $userId,
+        ?string $userName,
         int $priority,
         ?Carbon $createAt = null,
         ?Carbon $updatedAt = null,
@@ -51,7 +51,7 @@ final class Task
             id: $id,
             title: $title,
             description: $description,
-            assignee: new Assignee($userId, $userName),
+            assignee: $userId && $userName ? new Assignee($userId, $userName) : null,
             priority: new Priority($priority),
             createdAt: $createAt,
             updatedAt: $updatedAt,
