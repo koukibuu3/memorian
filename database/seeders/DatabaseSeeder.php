@@ -20,6 +20,10 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
         ]);
+        User::factory()->create([
+            'name' => 'Kouki AKasaka',
+            'email' => 'test2@example.com',
+        ]);
 
         // tasks
         Task::factory(3)->create();
