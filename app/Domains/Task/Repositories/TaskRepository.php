@@ -24,7 +24,9 @@ final class TaskRepository implements TaskRepositoryInterface
                 $taskModel->description,
                 $taskModel->assignee->id,
                 $taskModel->assignee->name,
-                $taskModel->priority
+                $taskModel->priority,
+                $taskModel->created_at,
+                $taskModel->updated_at
             );
         })->all();
 
@@ -41,7 +43,9 @@ final class TaskRepository implements TaskRepositoryInterface
             $taskModel->description,
             $taskModel->assignee->id,
             $taskModel->assignee->name,
-            $taskModel->priority
+            $taskModel->priority,
+            $taskModel->created_at,
+            $taskModel->updated_at
         );
     }
 
