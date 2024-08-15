@@ -35,6 +35,7 @@ final class TaskController
     {
         return View::make('tasks.detail', [
             'task' => $this->taskRepository->findById($id),
+            'tasks' => $this->taskRepository->findAll(),
             'priorities' => $this->priorityRepository->findAll(),
             'assignees' => $this->assigneeRepository->findAll(),
         ]);
@@ -82,10 +83,20 @@ final class TaskController
                 description: $postParams['description'],
                 userId: $postParams['assignee_id'],
                 userName: 'None User',
-                priority: $postParams['priority']
+                priority: $postParams['priority'],
+                parent: $postParams['parent_id'] !== null ? Task::recreate(
+                    id: $postParams['parent_id'],
+                    title: '',
+                    description: '',
+                    userId: null,
+                    userName: '',
+                    priority: 3,
+                ) : null,
             );
             $this->taskRepository->update($task);
         } catch (Exception $e) {
+            throw $e;
+
             return redirect()->route('tasks.show', ['id' => $id])->with('error', "Failed to update task. {$e->getMessage()}");
         }
 

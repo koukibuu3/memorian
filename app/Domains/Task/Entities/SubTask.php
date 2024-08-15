@@ -8,7 +8,7 @@ use App\Domains\Task\ValueObjects\Priority;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
-final class Task
+final class SubTask
 {
     public function __construct(
         public string $id,
@@ -16,8 +16,6 @@ final class Task
         public string $description,
         public ?Assignee $assignee,
         public Priority $priority,
-        public ?Task $parent = null,
-        public array $children = [],
         public ?Carbon $createdAt = null,
         public ?Carbon $updatedAt = null,
     ) {
@@ -29,8 +27,8 @@ final class Task
         ?int $userId,
         string $userName,
         int $priority,
-    ): Task {
-        return new Task(
+    ): SubTask {
+        return new SubTask(
             id: (string) Str::ulid(),
             title: $title,
             description: $description,
@@ -46,19 +44,15 @@ final class Task
         ?int $userId,
         ?string $userName,
         int $priority,
-        ?Task $parent = null,
-        array $children = [],
         ?Carbon $createAt = null,
         ?Carbon $updatedAt = null,
-    ): Task {
-        return new Task(
+    ): SubTask {
+        return new SubTask(
             id: $id,
             title: $title,
             description: $description,
             assignee: $userId && $userName ? new Assignee($userId, $userName) : null,
             priority: new Priority($priority),
-            parent: $parent,
-            children: $children,
             createdAt: $createAt,
             updatedAt: $updatedAt,
         );

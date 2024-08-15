@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
 /**
@@ -20,6 +21,8 @@ use Illuminate\Support\Carbon;
  * @property int $priority
  * @property Carbon $created_at
  * @property Carbon $updated_at
+ * @property Collection<Task> $children
+ * @property Collection<Task> $parents
  */
 class Task extends Model
 {
@@ -40,5 +43,15 @@ class Task extends Model
     public function assignee(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function children(): BelongsToMany
+    {
+        return $this->belongsToMany(Task::class, 'task_relations', 'parent_task_id', 'child_task_id');
+    }
+
+    public function parents(): BelongsToMany
+    {
+        return $this->belongsToMany(Task::class, 'task_relations', 'child_task_id', 'parent_task_id');
     }
 }
